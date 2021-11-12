@@ -3,11 +3,15 @@ const express = require("express");
 const db = require("./db");
 
 const app = express();
-// const middlewares = require("./middleware");
-
-// const controllers = require("./controllers");
+app.use(require("./middleware/headers"));
+const controllers = require("./controllers");
 
 app.use(express.json());
+
+app.use("/user", controllers.User);
+app.use("/task", controllers.Task);
+app.use("/comment", controllers.Comment);
+
 
 db.authenticate()
   .then(() => db.sync())

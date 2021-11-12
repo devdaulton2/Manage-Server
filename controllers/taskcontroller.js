@@ -1,7 +1,6 @@
-let express = require('express');
-let router = express.Router();
-let Task = require('../db').import('../models/taskmodel');
-let validateSession = require('../Middleware/validate-session');
+let router = require('express').Router();
+let {Task} = require("../models")
+let validateSession = require('../middleware/validate-session');
 
 router.get("/", (req, res) => {
     Task.findAll()
@@ -9,8 +8,14 @@ router.get("/", (req, res) => {
       .catch(err => res.status(500).json({ error: err }));
   });
 
-router.delete('/:id', validateSession, function (req, res) {
-    const query = {where: { id: req.params.id, owner_id: req.user.id}};
+  router.get("/:id", (req, res) => {
+    Task.findOne()
+      .then(tasks => res.status(200).json(tasks))
+      .catch(err => res.status(500).json({ error: err }));
+  });
+
+router.delete('/delete/:id', validateSession, function (req, res) {
+    const query = {where: { id: req.params.id, userId: req.user.id}};
 
     Task.destroy(query)
     .then(() => res.status(200).json({message: "Upload has been removed"}))
@@ -19,7 +24,6 @@ router.delete('/:id', validateSession, function (req, res) {
 
 router.post('/task', validateSession, (req, res) => {
   const taskEntry = {
-      userId: req.user.id,
       type: req.body.task.type,
       subType: req.body.task.subType,
       details: req.body.task.details,
@@ -27,7 +31,7 @@ router.post('/task', validateSession, (req, res) => {
       dueDate: req.body.task.dueDate,
       solved: req.body.task.solved,
       solutionDetails: req.body.task.solutionDetails,
-      owner_id: req.user.id
+      userId: req.user.id
   }
   Task.create(taskEntry)
     .then(task => res.status(200).json(task))
@@ -35,18 +39,18 @@ router.post('/task', validateSession, (req, res) => {
 })
 
 router.get('/mine', validateSession, (req, res) => {
-    let userid = req.user.id
+    let userId = req.user.id
     Task.findAll({
-        where: { owner_id: userid }
+        where: { userId: userId }
     })
     .then(log => res.status(200).json(log))
     .catch(err => res.status(500).json({ error: err }))
 })
 
+
 router.put('/update/:id', validateSession, function (req, res)
 {
   const updateTask = {
-    userId: req.user.id,
     type: req.body.task.type,
     subType: req.body.task.subType,
     details: req.body.task.details,
@@ -54,11 +58,11 @@ router.put('/update/:id', validateSession, function (req, res)
     dueDate: req.body.task.dueDate,
     solved: req.body.task.solved,
     solutionDetails: req.body.task.solutionDetails,
-    owner_id: req.user.id
+    userId: req.user.id
   };
 
   
-  const query = { where: { id: req.params.id, owner_id: req.user.id} };
+  const query = { where: { id: req.params.id, userId: req.user.id} };
   Task.update(updateTask, query)
     .then((tasks) => res.status(200).json(tasks))
     .catch((err) => res.status(500).json({ error: err }));  

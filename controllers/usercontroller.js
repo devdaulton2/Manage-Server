@@ -1,18 +1,17 @@
-let express = require('express');
-let router = express.Router();
-let user = require('../db').import('../models/usermodel');
+let router = require('express').Router();
+let { User } = require("../models");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs")
 
 router.post('/signup', function (req, res)
 {
-    user.create({
-        email: req.body.user.email,
-        password: bcrypt.hashSync(req.body.user.password, 13),
-        firstName: req.body.user.firstName,
-        lastName: req.body.user.lastName,
-        birthday: req.body.user.birthday,
-        accessCode: req.body.user.accessCode
+    User.create({
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthday: req.body.birthday,
+        accessCode: req.body.accessCode,
+        password: bcrypt.hashSync(req.body.password, 13)
     })
     .then(
         function createSuccessful(user) {
@@ -32,9 +31,9 @@ router.post('/signup', function (req, res)
 
 router.post('/signin', function(req, res) {
 
-    user.findOne(
+    User.findOne(
         {where:{
-            username: req.body.user.username
+            email: req.body.email
         }
     })
     .then(function loginSuccess(user) {

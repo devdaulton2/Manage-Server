@@ -1,9 +1,7 @@
-module.exports = (sequelize, DataTypes) => {
-    const Comment = sequelize.define('comment', {
-        userID: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+const {DataTypes} = require("sequelize");
+const db = require("../db");
+
+    const Comment = db.define('comment', {
         comment: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -17,5 +15,4 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
     })
-    return Comment;
-}
+    module.exports = Comment;

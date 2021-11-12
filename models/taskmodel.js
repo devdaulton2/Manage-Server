@@ -1,9 +1,11 @@
-module.exports = (sequelize, DataTypes) => {
-    const Task = sequelize.define(' comment', {
-        userId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+const {DataTypes} = require("sequelize");
+const db = require("../db");
+
+    const Task = db.define('task', {
+        // userId: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        // },
         type: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -31,10 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         solutionDetails: {
             type: DataTypes.STRING,
             allowNull: true,
-        },
-        owner_id: {
-            type: DataTypes.INTEGER,
         }
-    })
-    return Task;
-}
+        // },
+        // owner_id: {
+        //     type: DataTypes.INTEGER,
+            
+        // }
+    });
+
+    module.exports = Task;
