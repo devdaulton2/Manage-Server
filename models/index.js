@@ -8,8 +8,8 @@ User.hasMany(Comment);
 Task.belongsTo(User);
 Comment.belongsTo(User);
 
-Task.hasMany(Comment);
-Comment.belongsTo(Task);
+// Task.hasMany(Comment);
+// Comment.belongsTo(Task);
 
 module.exports = {
     Comment,

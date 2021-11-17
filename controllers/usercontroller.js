@@ -11,6 +11,7 @@ router.post('/signup', function (req, res)
         lastName: req.body.lastName,
         birthday: req.body.birthday,
         accessCode: req.body.accessCode,
+        // isAdmin: req.body.isAdmin,
         password: bcrypt.hashSync(req.body.password, 13)
     })
     .then(
@@ -38,7 +39,7 @@ router.post('/signin', function(req, res) {
     })
     .then(function loginSuccess(user) {
         if (user) {
-            bcrypt.compare(req.body.user.password, user.password, function (err, matches) {
+            bcrypt.compare(req.body.password, user.password, function (err, matches) {
                 if (matches) {
 
             let token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24 })

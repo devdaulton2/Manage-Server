@@ -1,11 +1,10 @@
 let router = require('express').Router();
-let { Comment } = require("../models");
+let { Comment, Task } = require("../models");
 let validateSession = require("../middleware/validate-session");
 
-router.post("/create", validateSession, function(req, res) {
+router.post("/create", validateSession, (req, res) => {
     const commentEntry = {
       comment: req.body.comment.comment,
-      taskId: req.body.comment.taskId,
       userId: req.user.id
     };
     Comment.create(commentEntry)
@@ -13,9 +12,11 @@ router.post("/create", validateSession, function(req, res) {
     .catch((err) => res.status(500).json({error: err})) 
 });
 
-router.get("/", validateSession, function (req, res) {
-    console.log('hey')
-})
+router.get("/all", validateSession, function (req, res) {
+    Comment.findAll()
+    .then(comments => res.status(200).json(comments))
+    .catch(err => res.status(500).json({ error: err }));
+});
 
   router.delete('/:id', validateSession, function (req, res) {
     const query = {where: { id: req.params.id, userId: req.user.id}};

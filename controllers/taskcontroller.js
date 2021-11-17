@@ -2,9 +2,14 @@ let router = require('express').Router();
 let {Task} = require("../models")
 let validateSession = require('../middleware/validate-session');
 
-router.get("/", (req, res) => {
+router.get("/all", (req, res) => {
     Task.findAll()
-      .then(tasks => res.status(200).json(tasks))
+      .then(tasks => 
+        // {
+        // if (tasks > 0) 
+        res.status(200).json(tasks)
+      // }
+      )
       .catch(err => res.status(500).json({ error: err }));
   });
 
@@ -22,7 +27,7 @@ router.delete('/delete/:id', validateSession, function (req, res) {
     .catch((err) => res.status(500).json({error: err}))
 })
 
-router.post('/task', validateSession, (req, res) => {
+router.post('/create', validateSession, (req, res) => {
   const taskEntry = {
       type: req.body.task.type,
       subType: req.body.task.subType,

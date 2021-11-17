@@ -23,6 +23,10 @@ const db = require("../db");
             type: DataTypes.DATEONLY,
             allowNull: true,
         },
+        // isAdmin: {
+        //     type: DataTypes.BOOLEAN,
+        //     allowNull: true
+        // },
         accessCode: {
             type: DataTypes.STRING,
             allowNull: false,
